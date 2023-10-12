@@ -2,7 +2,6 @@ import throttle from 'lodash.throttle';
 
 const KEY_STORAGE = 'feedback-form-state';
 
-const formdata = {};
 const refs = {
   form: document.querySelector('.feedback-form'),
   input: document.querySelector('.feedback-form input'),
@@ -34,11 +33,19 @@ function onTextAreaInput(event) {
 }
 
 function populateMessage() {
-  const savedMessage = localStorage.getItem('KEY_STORAGE');
-  if (savedMessage) {
-    console.log(savedMessage);
-    formData = JSON.parse(KEY_STORAGE);
-    refs.textarea.value = formData.message ?? '';
-    refs.input.value = formData.email ?? '';
-  }
+  const validateForm = event => {
+    event.preventDefault();
+    if (email === '' || message === '') {
+      alert('Будь-ласка, заповніть всі поля форми!');
+    } else {
+      const formData = {
+        email: `${email.value.trim()}`,
+        message: `${message.value.trim()}`,
+      };
+      console.log(formData);
+      form.reset();
+      localStorage.removeItem('KEY_STORAGE');
+    }
+  };
+  form.addEventListener('submit', validateForm);
 }
